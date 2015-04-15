@@ -1,0 +1,10 @@
+#!/bin/bash
+while read ip location
+do
+    echo $ip >> "$(echo $location | tr A-Z a-z | sed -e 's, ,-,g').txt"
+done
+mv .txt ANY.txt
+for i in *.txt
+do
+    mv $i $(echo $i | sed 's,.txt$,,')
+done

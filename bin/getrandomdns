@@ -1,7 +1,2 @@
 #!/bin/bash
-if test -z "$1"
-then
-    echo $0 '<country-code>'
-else
-    cat dns/$1 | gshuf | head -n1
-fi
+cat $1 | gshuf | head -n1

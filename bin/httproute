@@ -1,13 +1,19 @@
 #!/bin/bash
-bin/ixget $(bin/resolvehost $(bin/getrandomdns $1) $2) $3 $4 |
+
+dns=$(bin/getrandomdns $1)
+echo Using $dns as DNS
+bin/geolookup $dns
+
+echo Resolving $2
+edge=$(bin/resolvehost $dns $2)
+echo Using $edge as Edge server
+
+echo Requesting http://$3/$4 from Edge server
+bin/ixget $edge $3 $4 |
 grep -e ^X-Cache: -e ^X-Cache-Remote |
 sort -r | # to make sure that X-Cache is on top of X-Cache-Remote
-sed -e 's,^[^:]\+: \([^ ]\+\) from \([^ ]\+\) .*,\1 \2,' |
-while read hit host
+while read header
 do
-    echo $hit $(bin/resolvehost 8.8.8.8 $host)
-done |
-while read hit ip
-do
-    printf "%17s %-15s %s\n" $hit $ip "$(bin/geolookup $ip)"
+    echo $header
+    bin/geolookup $(bin/resolvehost 8.8.8.8 $(echo $header | sed -e 's,^.* from \([^ ]\+\) .*,\1,'))
 done

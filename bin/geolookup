@@ -1,2 +1,2 @@
 #!/bin/bash
-curl -s -H "X-Forwarded-For: $1" 'http://dev.old.com/edgescape.php'
+curl -s -H "X-Forwarded-For: $1" "http://dev.old.com/edgescape.php?ip=$1"

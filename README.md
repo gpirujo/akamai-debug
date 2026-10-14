@@ -21,6 +21,13 @@ Receives a server IP address or hostname, a hostname for the `Host` header, and 
 bin/geolookup <ip_address>
 ```
 Receives an IP address. Returns the city, country and continent where it is located, according to Akamai's Edgescape service.
+
+**Note (2026 update):** `bin/geolookup` depends on an HTTP endpoint behind Akamai, on a property with the Content Targeting (EdgeScape) behavior enabled, that reads the `X-Akamai-EdgeScape` request header and echoes the relevant fields back. `dev.old.com/edgescape.php` is no longer available — you'll need to stand up an equivalent endpoint on your own Akamai property.
+
+Akamai appends `X-Akamai-EdgeScape` to requests reaching the origin, with comma-separated key-value pairs such as `continent`, `country_code`, `region_code`, `city`, `zip`, `lat`/`long`, `timezone`, `throughput` and `asnum`. Example:
+```
+X-Akamai-Edgescape: georegion=263,country_code=US,region_code=MA,city=CAMBRIDGE,dma=506,pmsa=1120,areacode=617,county=MIDDLESEX,fips=25017,lat=42.3933,long=-71.1333,timezone=EST,zip=02138-02142+02238-02239,continent=NA,throughput=vhigh,asnum=21399
+```
 ```
 bin/httproute <dns_file> <server> <host> [<path>]
 ```
